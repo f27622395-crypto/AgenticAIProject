@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic Agentic AI</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #22c55e;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #log {
+      margin-top: 30px;
+      text-align: left;
+      background: #020617;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .step {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🤖 Simple Agentic AI</h1>
+<p>Agent Loop: Think → Decide → Act → Observe</p>
+
+<input id="goal" placeholder="Enter goal..." style="width:300px;padding:10px;">
+<br><br>
+
+<button onclick="runAgent()">Run Agent</button>
+
+<div id="log"></div>
+
+<script>
+
+function log(message){
+  const logDiv = document.getElementById("log")
+  logDiv.innerHTML += `<div class="step">${message}</div>`
+}
+
+async function runAgent(){
+
+  document.getElementById("log").innerHTML = ""
+
+  const goal = document.getElementById("goal").value
+
+  log("🎯 Goal: " + goal)
+
+  await think(goal)
+}
+
+async function think(goal){
+
+  log("🧠 Thinking about the goal...")
+
+  await sleep(1000)
+
+  decide(goal)
+}
+
+function decide(goal){
+
+  log("📋 Deciding best action...")
+
+  let action
+
+  if(goal.toLowerCase().includes("weather")){
+    action = "getWeather"
+  }
+  else if(goal.toLowerCase().includes("time")){
+    action = "getTime"
+  }
+  else{
+    action = "searchInternet"
+  }
+
+  act(action)
+}
+
+function act(action){
+
+  log("⚡ Acting: " + action)
+
+  let result
+
+  if(action === "getWeather"){
+    result = "Weather is 28°C ☀️"
+  }
+
+  else if(action === "getTime"){
+    result = new Date().toLocaleTimeString()
+  }
+
+  else{
+    result = "Pretend we searched the internet 🔎"
+  }
+
+  observe(result)
+}
+
+function observe(result){
+
+  log("👀 Observing result: " + result)
+
+  log("✅ Task completed")
+}
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+</script>
+
+</body>
+</html>
