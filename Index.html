@@ -44,6 +44,18 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
+    
+    .workflow-step {
+      transition: all 0.3s ease;
+    }
+    .workflow-step.active {
+      transform: scale(1.05);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+    .workflow-step.active .step-icon {
+      animation: pulse-glow 2s infinite;
+    }
   </style>
 </head>
 <body class="bg-[#0b0f19] text-slate-200 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500/30">
@@ -81,27 +93,51 @@
 <!-- Main Interface -->
 <main class="relative z-10 flex-grow container max-w-4xl mx-auto px-4 py-16 flex flex-col items-center">
   
-  <header class="text-center space-y-4 mb-12">
+  <header class="text-center space-y-4 mb-10">
     <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white inline-flex items-center gap-3">
       Autonomous Task Execution
     </h1>
     <p class="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
       Define an objective and let the agent autonomously plan, decide, and act. Built with an optimized feedback loop.
     </p>
-    
-    <div class="pt-4 flex justify-center gap-2 text-xs font-mono font-medium text-slate-500 uppercase tracking-wider">
-      <span class="px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-400"></span> Think</span>
-      <span class="text-slate-600 mt-1">→</span>
-      <span class="px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Decide</span>
-      <span class="text-slate-600 mt-1">→</span>
-      <span class="px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Act</span>
-      <span class="text-slate-600 mt-1">→</span>
-      <span class="px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> Observe</span>
-    </div>
   </header>
 
+  <!-- Interactive Workflow Visualization -->
+  <div class="w-full max-w-3xl mb-12 hidden sm:flex items-center justify-between relative">
+    <!-- Connecting Line -->
+    <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-800 -z-10 transform -translate-y-1/2"></div>
+    
+    <div id="step-think" class="workflow-step flex flex-col items-center gap-3 bg-[#0b0f19] px-4 py-2 rounded-xl border border-slate-800 opacity-50">
+      <div class="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center step-icon">
+        <span class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]"></span>
+      </div>
+      <span class="text-xs font-mono font-medium text-slate-300 uppercase tracking-widest">Think</span>
+    </div>
+
+    <div id="step-decide" class="workflow-step flex flex-col items-center gap-3 bg-[#0b0f19] px-4 py-2 rounded-xl border border-slate-800 opacity-50">
+      <div class="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center step-icon">
+        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]"></span>
+      </div>
+      <span class="text-xs font-mono font-medium text-slate-300 uppercase tracking-widest">Decide</span>
+    </div>
+
+    <div id="step-act" class="workflow-step flex flex-col items-center gap-3 bg-[#0b0f19] px-4 py-2 rounded-xl border border-slate-800 opacity-50">
+      <div class="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center step-icon">
+        <span class="w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.8)]"></span>
+      </div>
+      <span class="text-xs font-mono font-medium text-slate-300 uppercase tracking-widest">Act</span>
+    </div>
+
+    <div id="step-observe" class="workflow-step flex flex-col items-center gap-3 bg-[#0b0f19] px-4 py-2 rounded-xl border border-slate-800 opacity-50">
+      <div class="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center step-icon">
+        <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></span>
+      </div>
+      <span class="text-xs font-mono font-medium text-slate-300 uppercase tracking-widest">Observe</span>
+    </div>
+  </div>
+
   <!-- Control Panel -->
-  <div class="w-full bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 mb-8">
+  <div class="w-full bg-[#111827]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 mb-8 relative z-20">
     <div class="flex flex-col sm:flex-row gap-2">
       <div class="relative flex-grow">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -121,7 +157,7 @@
   </div>
 
   <!-- Execution Terminal -->
-  <div id="terminal-wrapper" class="w-full rounded-2xl border border-white/10 bg-[#0f172a] shadow-2xl overflow-hidden hidden transition-all duration-500 opacity-0 transform translate-y-4">
+  <div id="terminal-wrapper" class="w-full rounded-2xl border border-white/10 bg-[#0f172a] shadow-2xl overflow-hidden hidden transition-all duration-500 opacity-0 transform translate-y-4 relative z-20">
     <!-- Terminal Header -->
     <div class="flex items-center px-4 py-3 bg-[#1e293b]/80 border-b border-white/5">
       <div class="flex space-x-2">
@@ -145,6 +181,32 @@
 </main>
 
 <script>
+function updateWorkflowUI(activeStepId) {
+  const steps = ['step-think', 'step-decide', 'step-act', 'step-observe'];
+  steps.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (id === activeStepId) {
+      el.classList.add('active', 'opacity-100');
+      el.classList.remove('opacity-50');
+    } else {
+      el.classList.remove('active', 'opacity-100');
+      el.classList.add('opacity-50');
+    }
+  });
+}
+
+function resetWorkflowUI() {
+  const steps = ['step-think', 'step-decide', 'step-act', 'step-observe'];
+  steps.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      el.classList.remove('active', 'opacity-100');
+      el.classList.add('opacity-50');
+    }
+  });
+}
+
 function log(htmlContent, type = 'info'){
   const logDiv = document.getElementById("log")
   
@@ -178,6 +240,8 @@ async function runAgent(){
   }, 10);
   
   logDiv.innerHTML = ""
+  resetWorkflowUI()
+  
   btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Executing...`
   btn.classList.add("opacity-80", "cursor-not-allowed")
   btn.disabled = true;
@@ -194,15 +258,19 @@ async function runAgent(){
   btn.innerHTML = `<span class="relative z-10">Initialize Run</span><svg class="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`
   btn.classList.remove("opacity-80", "cursor-not-allowed")
   btn.disabled = false;
+  
+  setTimeout(() => resetWorkflowUI(), 2000);
 }
 
 async function think(goal){
+  updateWorkflowUI('step-think')
   log(`Analyzing objective context and formulating plan...`, 'think')
   await sleep(1200)
   decide(goal)
 }
 
 async function decide(goal){
+  updateWorkflowUI('step-decide')
   log(`Synthesizing action space. Selecting optimal tool.`, 'decide')
   await sleep(800)
   let action
@@ -224,6 +292,7 @@ async function decide(goal){
 }
 
 async function act(action){
+  updateWorkflowUI('step-act')
   log(`Executing tool: <span class="text-rose-300 font-medium">${action}()</span>`, 'act')
   await sleep(1500)
   let result
@@ -242,6 +311,7 @@ async function act(action){
 }
 
 async function observe(result){
+  updateWorkflowUI('step-observe')
   log(`Tool output received: <span class="text-cyan-300">${result}</span>`, 'observe')
   await sleep(800)
   log(`Objective successfully achieved. Awaiting next command.`, 'success')
