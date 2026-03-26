@@ -1,139 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Basic Agentic AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      margin: 0;
-      padding: 0;
+    /* Custom animations for the log */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Navbar Styles */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #1e293b;
-      padding: 15px 30px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    .nav-logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #22c55e;
-    }
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
-      transition: color 0.3s;
-    }
-    .nav-links li a:hover {
-      color: #22c55e;
-    }
-    @media (max-width: 600px) {
-      .navbar {
-        flex-direction: column;
-        gap: 15px;
-      }
-    }
-
-    /* Main Content Styles */
-    .container {
-      padding: 40px;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #22c55e;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #log {
-      margin-top: 30px;
-      text-align: left;
-      background: #020617;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
     .step {
-      margin-bottom: 10px;
+      animation: slideIn 0.3s ease-out forwards;
     }
   </style>
 </head>
-<body>
+<body class="bg-slate-900 text-white font-sans antialiased min-h-screen flex flex-col">
 
-<!-- Navigation Bar -->
-<nav class="navbar">
-  <div class="nav-logo">AgenticAI</div>
-  <ul class="nav-links">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
+<!-- Modern Tailwind Navbar -->
+<nav class="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-700/50 shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="#" class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 tracking-tight hover:from-green-300 hover:to-blue-400 transition-all duration-300">
+          AgenticAI
+        </a>
+      </div>
+      <!-- Desktop Menu -->
+      <div class="hidden md:block">
+        <ul class="flex space-x-8 items-center">
+          <li>
+            <a href="#" class="text-slate-300 hover:text-green-400 font-medium transition-colors duration-200 relative group">
+              Home
+              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-400 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-slate-300 hover:text-green-400 font-medium transition-colors duration-200 relative group">
+              About
+              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-400 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-slate-300 hover:text-green-400 font-medium transition-colors duration-200 relative group">
+              Contact
+              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-400 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="bg-slate-800 hover:bg-slate-700 text-green-400 px-4 py-2 rounded-full border border-slate-700 hover:border-green-500/50 transition-all duration-300 text-sm font-semibold">
+              Get Started
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </nav>
 
-<div class="container">
-  <h1>🤖 Simple Agentic AI</h1>
-  <p>Agent Loop: Think → Decide → Act → Observe</p>
+<main class="flex-grow container mx-auto px-4 py-12 flex flex-col items-center">
+  <div class="text-center space-y-4 mb-10">
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-100">🤖 Simple Agentic AI</h1>
+    <p class="text-lg text-slate-400 font-mono bg-slate-800/50 inline-block px-4 py-2 rounded-lg border border-slate-700/50">
+      Agent Loop: Think <span class="text-green-500">→</span> Decide <span class="text-green-500">→</span> Act <span class="text-green-500">→</span> Observe
+    </p>
+  </div>
 
-  <input id="goal" placeholder="Enter goal..." style="width:300px;padding:10px;">
-  <br><br>
+  <div class="w-full max-w-md space-y-4 text-center">
+    <input id="goal" type="text" placeholder="Enter goal... e.g., 'Check weather'" 
+      class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-white placeholder-slate-400 shadow-inner transition-all duration-300">
+    
+    <button onclick="runAgent()" 
+      class="w-full md:w-auto px-8 py-3 bg-green-500 hover:bg-green-400 text-slate-900 font-bold rounded-xl shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] transform hover:-translate-y-0.5 transition-all duration-300">
+      Run Agent
+    </button>
+  </div>
 
-  <button onclick="runAgent()">Run Agent</button>
-
-  <div id="log"></div>
-</div>
+  <div id="log" class="mt-12 w-full max-w-2xl bg-slate-950/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-2xl text-left hidden font-mono text-sm leading-relaxed text-slate-300 min-h-[150px]">
+  </div>
+</main>
 
 <script>
-
 function log(message){
   const logDiv = document.getElementById("log")
-  logDiv.innerHTML += `<div class="step">${message}</div>`
+  logDiv.classList.remove("hidden")
+  // Creating a new div for the message
+  const stepDiv = document.createElement("div")
+  stepDiv.className = "step flex items-start space-x-3 py-2 border-b border-slate-800/50 last:border-0"
+  stepDiv.innerHTML = `<span class="text-green-500">❯</span><span>${message}</span>`
+  logDiv.appendChild(stepDiv)
+  
+  // Auto-scroll to bottom
+  logDiv.scrollTop = logDiv.scrollHeight;
 }
 
 async function runAgent(){
+  const logDiv = document.getElementById("log")
+  logDiv.innerHTML = ""
+  logDiv.classList.add("hidden")
 
-  document.getElementById("log").innerHTML = ""
+  const goal = document.getElementById("goal").value || "Do something awesome"
 
-  const goal = document.getElementById("goal").value
-
-  log("🎯 Goal: " + goal)
+  log(`<span class="text-blue-400 font-bold">🎯 Goal:</span> ${goal}`)
 
   await think(goal)
 }
 
 async function think(goal){
-
-  log("🧠 Thinking about the goal...")
-
+  log(`<span class="text-purple-400">🧠 Thinking about the goal...</span>`)
   await sleep(1000)
-
   decide(goal)
 }
 
 function decide(goal){
-
-  log("📋 Deciding best action...")
-
+  log(`<span class="text-yellow-400">📋 Deciding best action...</span>`)
   let action
 
   if(goal.toLowerCase().includes("weather")){
@@ -150,19 +132,15 @@ function decide(goal){
 }
 
 function act(action){
-
-  log("⚡ Acting: " + action)
-
+  log(`<span class="text-orange-400">⚡ Acting:</span> Executing ${action}()`)
   let result
 
   if(action === "getWeather"){
     result = "Weather is 28°C ☀️"
   }
-
   else if(action === "getTime"){
     result = new Date().toLocaleTimeString()
   }
-
   else{
     result = "Pretend we searched the internet 🔎"
   }
@@ -171,16 +149,13 @@ function act(action){
 }
 
 function observe(result){
-
-  log("👀 Observing result: " + result)
-
-  log("✅ Task completed")
+  log(`<span class="text-cyan-400">👀 Observing result:</span> ${result}`)
+  log(`<span class="text-green-400 font-bold">✅ Task completed</span>`)
 }
 
 function sleep(ms){
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-
 </script>
 
 </body>
